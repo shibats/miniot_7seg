@@ -33,7 +33,7 @@ def prepare():
         if not display.check_availability():
             # 7セグディスプレイが使えなかったので，displayをNoneに
             display = None
-    except ImportError:
+    except (ImportError, FileNotFoundError):
         # Raspberry Piでなく，Win/Macでこのモジュールを使っている場合
         pass
     
