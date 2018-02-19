@@ -22,6 +22,7 @@ options: {
     value: null,
 
     hexvalue: null,
+    decimalpoints: null,
 
     /**
     Override the default segment on color (Red).  
@@ -183,6 +184,7 @@ options: {
     */
     value: null,
     hexvalue: [0,0,0,0],
+    decimalpoints: [false,false,false,false],
 
     /**
     Defines the number of digits that comprise the array.
@@ -315,9 +317,11 @@ _displayValue: function(value) {
 _displayHexValue: function(hexvalue) {
     var self = this, total = hexvalue.length;
     self.options['hexvalue'] = hexvalue;
+    var decimalpoints = self.options['decimalpoints']
     $.each(self.aJqDigits, function(index, jqDigit) {
-        var value = hexvalue[total-index-1];
-        self.aJqDigits[index].sevenSegDigit("displayHexValue", value, false);
+        var value = hexvalue[total-index-1],
+            dp = decimalpoints[total-index-1];
+        self.aJqDigits[index].sevenSegDigit("displayHexValue", value, dp);
     });
 
     self._trigger("change", null, hexvalue);
@@ -328,6 +332,9 @@ _turnOn: function(index) {
     if( index < 0 || index >=  8*4 )
         return;
     var dIndex = 3-Math.floor(index/8), pIndex = index%8;
+    if( pIndex == 7 ) {
+        self.options['decimalpoints'][dIndex] = true;
+    }
     self.options['hexvalue'][dIndex] |= 1 << pIndex;
     self._displayHexValue(self.options['hexvalue']);
 },
@@ -337,7 +344,10 @@ _turnOff: function(index) {
     if( index < 0 || index >=  8*4 )
         return;
     var dIndex = 3-Math.floor(index/8), pIndex = index%8;
-    self.options['hexvalue'][dIndex] &=  7^(1 << pIndex);
+    if( pIndex == 7 ) {
+        self.options['decimalpoints'][dIndex] = false;
+    }
+    self.options['hexvalue'][dIndex] &=  127^(1 << pIndex);
     self._displayHexValue(self.options['hexvalue']);
 },
 
