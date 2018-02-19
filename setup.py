@@ -36,7 +36,7 @@ else:
 
 
 setup(name              = 'miniot_7seg',
-      version           = '0.8',
+      version           = '0.83',
       author            = 'Atsushi Shibata',
       author_email      = 'shibata@m-info.co.jp',
       description       = 'A library to control Adafruit LED backpack displays, and to show LED image in Jupyter Notebook cell.',
